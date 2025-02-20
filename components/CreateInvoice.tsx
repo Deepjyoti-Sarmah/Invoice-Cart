@@ -11,6 +11,7 @@ import { Button } from './ui/button'
 import { CalendarIcon } from 'lucide-react'
 import { PopoverContent } from './ui/popover'
 import { Calendar } from './ui/calendar'
+import { Textarea } from './ui/textarea'
 
 export default function CreateInvoice() {
   const [selectedDate, setSelectedDate] = useState(new Date())
@@ -72,7 +73,7 @@ export default function CreateInvoice() {
           </div>
         </div>
 
-        <div className='grid md:grid-cols-2 gap-6'>
+        <div className='grid md:grid-cols-2 gap-6 mb-6'>
           <div>
             <div>
               <Label>Date</Label>
@@ -101,7 +102,58 @@ export default function CreateInvoice() {
             </Popover>
           </div>
 
+          <div>
+            <Label>Invoice Due</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select due date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='0'>Due on Reciept</SelectItem>
+                <SelectItem value='15'>Net 15</SelectItem>
+                <SelectItem value='30'>Net 30</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
+
+        <div>
+          <div className="grid grid-cols-12 gap-4 mb-2 font-medium">
+            <p className="col-span-6">Description</p>
+            <p className="col-span-2">Quantity</p>
+            <p className="col-span-2">Rate</p>
+            <p className="col-span-2">Amount</p>
+          </div>
+
+
+          <div className='grid grid-cols-12 gap-4 mb-6'>
+            <div className='col-span-6'>
+              <Textarea
+                placeholder='Item name & description'
+              />
+            </div>
+            <div className='col-span-2'>
+              <Input
+                type='number'
+                placeholder='0'
+              />
+            </div>
+            <div className='col-span-2'>
+              <Input
+                type='number'
+                placeholder='0'
+              />
+            </div>
+            <div className='col-span-2'>
+              <Input
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+
+
       </CardContent>
     </Card>
   )
