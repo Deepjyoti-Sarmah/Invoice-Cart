@@ -39,6 +39,12 @@ export default function CreateInvoice() {
     <Card className='w-full max-w-4xl mx-auto'>
       <CardContent className='p-6'>
         <form id={form.id} action={action} onSubmit={form.onSubmit}>
+          <input
+            type='hidden'
+            name={fields.date.name}
+            value={selectedDate.toISOString()}
+          />
+
           <div className='flex flex-col gap-1 w-fit mb-6'>
             <div className='flex items-center gap-4'>
               <Badge variant="secondary">Draft</Badge>
@@ -224,12 +230,17 @@ export default function CreateInvoice() {
               </div>
               <div className='col-span-2'>
                 <Input
+                  name={fields.invoiceItemRate.name}
+                  key={fields.invoiceItemRate.key}
                   type='number'
                   placeholder='0'
                 />
+                <p className='text-red-500 text-sm'>{fields.invoiceItemRate.errors}</p>
               </div>
               <div className='col-span-2'>
                 <Input
+                  type='number'
+                  placeholder='0'
                   disabled
                 />
               </div>
@@ -251,7 +262,12 @@ export default function CreateInvoice() {
 
           <div>
             <Label>Note</Label>
-            <Textarea placeholder='Add your Note/s right here...' />
+            <Textarea
+              name={fields.note.name}
+              key={fields.note.key}
+              defaultValue={fields.note.initialValue}
+              placeholder='Add your Note/s right here...' />
+            <p className='text-red-500 text-sm'>{fields.note.errors}</p>
           </div>
 
           <div className='flex items-center justify-end mt-6'>
