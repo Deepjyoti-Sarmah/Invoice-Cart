@@ -12,6 +12,7 @@ import { CalendarIcon } from 'lucide-react'
 import { PopoverContent } from './ui/popover'
 import { Calendar } from './ui/calendar'
 import { Textarea } from './ui/textarea'
+import SubmitButton from './SubmitButton'
 
 export default function CreateInvoice() {
   const [selectedDate, setSelectedDate] = useState(new Date())
@@ -80,7 +81,7 @@ export default function CreateInvoice() {
             </div>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" className='w-[280px] text-left'>
                   <CalendarIcon />
                   {selectedDate ? (
                     new Intl.DateTimeFormat("en-IN", {
@@ -152,8 +153,29 @@ export default function CreateInvoice() {
           </div>
         </div>
 
+        <div className='flex justify-end'>
+          <div className='w-1/3'>
+            <div className='flex justify-between py-2'>
+              <span>Subtotal</span>
+              <span>$5.00</span>
+            </div>
+            <div className='flex justify-between py-2 border-t'>
+              <span>Total (USD)</span>
+              <span className='font-medium underline underline-offset-2'>$5.00</span>
+            </div>
+          </div>
+        </div>
 
+        <div>
+          <Label>Note</Label>
+          <Textarea placeholder='Add your Note/s right here...' />
+        </div>
 
+        <div className='flex items-center justify-end mt-6'>
+          <div>
+            <SubmitButton text='Send Invoice to Client' />
+          </div>
+        </div>
       </CardContent>
     </Card>
   )
