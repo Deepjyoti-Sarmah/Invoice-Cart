@@ -10,3 +10,4 @@ export async function requiredUser() {
 
   return session
 }
+
