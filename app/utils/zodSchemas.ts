@@ -1,4 +1,3 @@
-import RenderFromTemplateContext from "next/dist/client/components/render-from-template-context";
 import { z } from "zod";
 
 export const onboardingSchema = z.object({
