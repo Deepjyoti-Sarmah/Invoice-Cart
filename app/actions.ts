@@ -53,8 +53,8 @@ export async function createInvoice(prevState: any, formData: FormData) {
       date: submission.value.date,
       dueDate: submission.value.dueDate,
       fromAddress: submission.value.fromAddress,
-      fromName: submission.value.fromName,
       fromEmail: submission.value.fromEmail,
+      fromName: submission.value.fromName,
       invoiceItemDescription: submission.value.invoiceItemDescription,
       invoiceItemQuantity: submission.value.invoiceItemQuantity,
       invoiceItemRate: submission.value.invoiceItemRate,
@@ -63,8 +63,8 @@ export async function createInvoice(prevState: any, formData: FormData) {
       status: submission.value.status,
       total: submission.value.total,
       note: submission.value.note,
-      userId: session.user?.id
-    }
+      userId: session.user?.id,
+    },
   });
 
   const sender = {
@@ -77,14 +77,16 @@ export async function createInvoice(prevState: any, formData: FormData) {
     to: [{ email: "deepjyotisarmah37@gmail.com" }],
     template_uuid: "94875a12-b0a4-4bfc-87f1-704328a7a563",
     template_variables: {
-      clientName: submission.value.clientAddress,
-      invoiceNumber: submission.value.invoiceNumber,
-      dueDate: submission.value.date,
-      totalAmount: formatCurrency({
+      "clientName": submission.value.clientName,
+      "invoiceNumber": submission.value.invoiceNumber,
+      "invoiceDueDate": new Intl.DateTimeFormat("en-IN", {
+        dateStyle: "long",
+      }).format(new Date(submission.value.dueDate)),
+      "invoiceAmount": formatCurrency({
         amount: submission.value.total,
         currency: submission.value.currency as any,
       }),
-      invoiceLink: "Test_InvoiceLink",
+      "invoiceLink": "Test_InvoiceLink"
     }
   });
 
