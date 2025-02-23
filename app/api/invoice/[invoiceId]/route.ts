@@ -1,14 +1,16 @@
-import { prisma } from "@/app/utils/db";
 import { NextResponse } from "next/server";
 import jsPDF from "jspdf";
 import { formatCurrency } from "@/app/utils/formatCurrency";
-import { buffer } from "node:stream/consumers";
+import { prisma } from "@/app/utils/db";
 
-export async function GET(request: Request, {
-  params
-}: {
-  params: Promise<{ invoiceId: string }>
-}) {
+export async function GET(
+  request: Request,
+  {
+    params,
+  }: {
+    params: Promise<{ invoiceId: string }>;
+  }
+) {
   const { invoiceId } = await params;
 
   const data = await prisma.invoice.findUnique({
@@ -23,8 +25,8 @@ export async function GET(request: Request, {
       fromEmail: true,
       fromAddress: true,
       clientName: true,
-      clientEmail: true,
       clientAddress: true,
+      clientEmail: true,
       date: true,
       dueDate: true,
       invoiceItemDescription: true,
@@ -32,11 +34,11 @@ export async function GET(request: Request, {
       invoiceItemRate: true,
       total: true,
       note: true,
-    }
-  })
+    },
+  });
 
   if (!data) {
-    return NextResponse.json({ error: "Invoice not found" }, { status: 404 })
+    return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
   }
 
   const pdf = new jsPDF({
@@ -45,52 +47,52 @@ export async function GET(request: Request, {
     format: "a4",
   });
 
-  //set font
+  // set font
   pdf.setFont("helvetica");
 
   //set header
   pdf.setFontSize(24);
-  pdf.text(data.invoiceName, 20, 20)
+  pdf.text(data.invoiceName, 20, 20);
 
-  //from section
-  pdf.setFontSize(12)
-  pdf.text("From", 20, 40)
-  pdf.setFontSize(10)
-  pdf.text([data.fromName, data.fromEmail, data.fromAddress], 20, 45)
+  // From Section
+  pdf.setFontSize(12);
+  pdf.text("From", 20, 40);
+  pdf.setFontSize(10);
+  pdf.text([data.fromName, data.fromEmail, data.fromAddress], 20, 45);
 
-  // client section
-  pdf.setFontSize(12)
-  pdf.text("Bill to", 20, 70)
-  pdf.setFontSize(10)
-  pdf.text([data.clientName, data.clientEmail, data.clientAddress], 20, 75)
+  // Client Section
+  pdf.setFontSize(12);
+  pdf.text("Bill to", 20, 70);
+  pdf.setFontSize(10);
+  pdf.text([data.clientName, data.clientEmail, data.clientAddress], 20, 75);
 
-  //invoice details
-  pdf.setFontSize(10)
-  pdf.text(`Invoice Number: #${data.invoiceNumber}`, 120, 40)
+  // Invoice details
+  pdf.setFontSize(10);
+  pdf.text(`Invoice Number: #${data.invoiceNumber}`, 120, 40);
   pdf.text(
     `Date: ${new Intl.DateTimeFormat("en-IN", {
       dateStyle: "long",
     }).format(data.date)}`,
     120,
     45
-  )
-  pdf.text(`Due Date: Net ${data.dueDate}`, 120, 50)
+  );
+  pdf.text(`Due Date: Net ${data.dueDate}`, 120, 50);
 
-  //Item table header
-  pdf.setFontSize(10)
-  pdf.setFont("helvetica", "bold")
-  pdf.text("Description", 20, 100)
-  pdf.text("Quantity", 100, 100)
-  pdf.text("Rate", 130, 100)
-  pdf.text("Total", 160, 100)
+  // Item table header
+  pdf.setFontSize(10);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Description", 20, 100);
+  pdf.text("Quantity", 100, 100);
+  pdf.text("Rate", 130, 100);
+  pdf.text("Total", 160, 100);
 
-  //draw header line
-  pdf.line(20, 102, 190, 102)
+  // draw header line
+  pdf.line(20, 102, 190, 102);
 
-  //item details
-  pdf.setFont("helvetica", "normal")
-  pdf.text(data.invoiceItemDescription, 20, 110)
-  pdf.text(data.invoiceItemQuantity.toString(), 10, 110)
+  // Item Details
+  pdf.setFont("helvetica", "normal");
+  pdf.text(data.invoiceItemDescription, 20, 110);
+  pdf.text(data.invoiceItemQuantity.toString(), 100, 110);
   pdf.text(
     formatCurrency({
       amount: data.invoiceItemRate,
@@ -98,39 +100,41 @@ export async function GET(request: Request, {
     }),
     130,
     110
-  )
+  );
   pdf.text(
     formatCurrency({ amount: data.total, currency: data.currency as any }),
     160,
     110
-  )
+  );
 
-  //total section
-  pdf.line(20, 115, 190, 115)
-  pdf.setFont("helvetica", "bold")
-  pdf.text(`total (${data.currency})`, 130, 130)
+  // Total Section
+  pdf.line(20, 115, 190, 115);
+
+  pdf.setFont("helvetica", "bold");
+  pdf.text(`Total (${data.currency})`, 130, 130);
   pdf.text(
     formatCurrency({ amount: data.total, currency: data.currency as any }),
     160,
     130
-  )
+  );
 
-  //additional note
+  //Additional Note
   if (data.note) {
-    pdf.setFont("helvetica", "normal")
-    pdf.setFontSize(10)
-    pdf.text("Note:", 20, 150)
-    pdf.text(data.note, 20, 155)
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(10);
+    pdf.text("Note:", 20, 150);
+    pdf.text(data.note, 20, 155);
   }
 
-  //generate pdf as buffer 
-  const pdfBuffer = Buffer.from(pdf.output("arraybuffer"))
+  // generate pdf as buffer
+  const pdfBuffer = Buffer.from(pdf.output("arraybuffer"));
 
   //return pdf as download
+
   return new NextResponse(pdfBuffer, {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": "inline",
-    }
-  })
+    },
+  });
 }
