@@ -12,7 +12,7 @@ import { Calendar } from './ui/calendar'
 import { Textarea } from './ui/textarea'
 import { formatCurrency } from '@/app/utils/formatCurrency'
 import SubmitButton from './SubmitButton'
-import { createInvoice } from '@/app/actions'
+import { editInvoice } from '@/app/actions'
 import { useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { invoiceSchema } from '@/app/utils/zodSchemas'
@@ -24,7 +24,7 @@ interface EditInvoiceProps {
 }
 
 export default function EditInvoice({ data }: EditInvoiceProps) {
-  const [lastResult, action] = useActionState(createInvoice, undefined)
+  const [lastResult, action] = useActionState(editInvoice, undefined)
   const [form, fields] = useForm({
     lastResult,
 
@@ -53,6 +53,12 @@ export default function EditInvoice({ data }: EditInvoiceProps) {
             type="hidden"
             name={fields.date.name}
             value={selectedDate.toISOString()}
+          />
+
+          <input
+            type="hidden"
+            name="id"
+            value={data.id}
           />
 
           <input
