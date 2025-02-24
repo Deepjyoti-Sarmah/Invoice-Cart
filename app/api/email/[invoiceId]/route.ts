@@ -34,9 +34,14 @@ export async function POST(request: Request, {
     emailClient.send({
       from: sender,
       to: [{ email: "deepjyotisarmah37@gmail.com" }],
-      template_uuid: "5e3aaa37-adea-466c-9c9b-bd68bb7a3b42",
+      template_uuid: "263de8f3-22bc-4c11-808a-89ea35be7e47",
       template_variables: {
         "first_name": invoiceData.clientName,
+        "company_info_name": "InvoiceCart",
+        "company_info_address": "Chad street 123",
+        "company_info_city": "Guwahati",
+        "company_info_zip_code": "781030",
+        "company_info_country": "India"
       }
     });
 
