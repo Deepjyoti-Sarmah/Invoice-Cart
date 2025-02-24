@@ -131,6 +131,29 @@ export async function editInvoice(prevState: any, formData: FormData) {
     }
   })
 
+  const sender = {
+    email: "hello@demomailtrap.com",
+    name: "Deep test",
+  };
+
+  emailClient.send({
+    from: sender,
+    to: [{ email: "deepjyotisarmah37@gmail.com" }],
+    template_uuid: "2d520580-09d9-4f01-ab46-01e8a6ae1bfc",
+    template_variables: {
+      "clientName": submission.value.clientName,
+      "invoiceNumber": submission.value.invoiceNumber,
+      "invoiceDueDate": new Intl.DateTimeFormat("en-IN", {
+        dateStyle: "long",
+      }).format(new Date(submission.value.date)),
+      "invoiceAmount": formatCurrency({
+        amount: submission.value.total,
+        currency: submission.value.currency as any,
+      }),
+      "invoiceLink": `http://localhost:3000/api/invoice/${data.id}`
+    }
+  });
+
   return redirect("/dashboard/invoices")
 
 }
