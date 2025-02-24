@@ -9,10 +9,12 @@ import { toast } from 'sonner'
 
 interface InvoiceActionsProps {
   id: string;
+  status: string;
 }
 
 export default function InvoiceActions({
-  id
+  id,
+  status
 }: InvoiceActionsProps) {
 
   const handleSendReminder = () => {
@@ -57,11 +59,13 @@ export default function InvoiceActions({
             <Trash className='size-4 mr-2' />Delete Invoice
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/invoices/${id}/paid`}>
-            <CheckCircle className='size-4 mr-2' />Mark as Paid
-          </Link>
-        </DropdownMenuItem>
+        {status !== "PAID" && (
+          <DropdownMenuItem asChild>
+            <Link href={`/dashboard/invoices/${id}/paid`}>
+              <CheckCircle className='size-4 mr-2' />Mark as Paid
+            </Link>
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )
