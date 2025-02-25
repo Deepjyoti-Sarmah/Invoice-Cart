@@ -51,7 +51,7 @@ export default function DashboardBlocks() {
           <Activity className='size-4 text-muted-foreground' />
         </CardHeader>
         <CardContent>
-          <h2 className='text-2xl font-bold'>11</h2>
+          <h2 className='text-2xl font-bold'>10</h2>
           <p className='text-xs text-muted-foreground'>
             Invoices which are currently pending!
           </p>
