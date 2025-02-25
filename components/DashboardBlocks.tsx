@@ -1,16 +1,58 @@
 import { Activity, CreditCard, DollarSign, Users } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { prisma } from '@/app/utils/db'
+import { requiredUser } from '@/app/utils/hooks';
 
-export default function DashboardBlocks() {
+async function getData(userId: string) {
+  const [data, openInvoices, paidInvoices] = await Promise.all([
+    prisma.invoice.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        total: true
+      }
+    }),
+
+    prisma.invoice.findMany({
+      where: {
+        userId: userId,
+        status: "PENDING"
+      },
+      select: {
+        id: true
+      }
+    }),
+
+    prisma.invoice.findMany({
+      where: {
+        userId: userId,
+        status: "PAID"
+      },
+      select: {
+        id: true
+      }
+    })
+  ]);
+
+  return { data, openInvoices, paidInvoices }
+}
+
+export default async function DashboardBlocks() {
+  const session = await requiredUser()
+  const { data, openInvoices, paidInvoices } = await getData(session.user?.id as string)
+
   return (
     <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-8'>
       <Card>
         <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-          <CardTitle className='text-sm font-medium'>Total revenue</CardTitle>
+          <CardTitle className='text-sm font-medium'>Total Revenue</CardTitle>
           <DollarSign className='size-4 text-muted-foreground' />
         </CardHeader>
         <CardContent>
-          <h2 className='text-2xl font-bold'>$567.00</h2>
+          <h2 className='text-2xl font-bold'>
+            ${data.reduce((acc, invoice) => acc + invoice.total, 0)}
+          </h2>
           <p className='text-xs text-muted-foreground'>Based on total volume</p>
         </CardContent>
       </Card>
@@ -23,7 +65,7 @@ export default function DashboardBlocks() {
           <Users className='size-4 text-muted-foreground' />
         </CardHeader>
         <CardContent>
-          <h2 className='text-2xl font-bold'>22</h2>
+          <h2 className='text-2xl font-bold'>+{data.length}</h2>
           <p className='text-xs text-muted-foreground'>Total Invoices Issued!</p>
         </CardContent>
       </Card>
@@ -36,7 +78,7 @@ export default function DashboardBlocks() {
           <CreditCard className='size-4 text-muted-foreground' />
         </CardHeader>
         <CardContent>
-          <h2 className='text-2xl font-bold'>12</h2>
+          <h2 className='text-2xl font-bold'>+{paidInvoices.length}</h2>
           <p className='text-xs text-muted-foreground'>
             Total Invoices which have been paid!
           </p>
@@ -51,7 +93,7 @@ export default function DashboardBlocks() {
           <Activity className='size-4 text-muted-foreground' />
         </CardHeader>
         <CardContent>
-          <h2 className='text-2xl font-bold'>10</h2>
+          <h2 className='text-2xl font-bold'>+{openInvoices.length}</h2>
           <p className='text-xs text-muted-foreground'>
             Invoices which are currently pending!
           </p>
