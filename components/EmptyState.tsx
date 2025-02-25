@@ -1,15 +1,20 @@
+import { buttonVariants } from "@/components/ui/button";
 import { Ban, PlusCircle } from "lucide-react";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
 
-interface EmptyStateProps {
+interface iAppProps {
   title: string;
   description: string;
   buttontext: string;
   href: string;
 }
 
-export default function EmptyState({ title, description, buttontext, href }: EmptyStateProps) {
+export function EmptyState({
+  buttontext,
+  description,
+  href,
+  title,
+}: iAppProps) {
   return (
     <div className="flex flex-col flex-1 h-ful items-center justify-center rounded-md border-2 border-dashed p-8 text-center animate-in  fade-in-50">
       <div className="flex items-center justify-center size-20 rounded-full bg-primary/10">
@@ -23,6 +28,5 @@ export default function EmptyState({ title, description, buttontext, href }: Emp
         <PlusCircle className="size-4 mr-2" /> {buttontext}
       </Link>
     </div>
-  )
+  );
 }
-

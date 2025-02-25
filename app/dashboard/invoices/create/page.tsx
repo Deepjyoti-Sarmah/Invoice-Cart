@@ -4,7 +4,6 @@ import CreateInvoice from '@/components/CreateInvoice'
 import React from 'react'
 
 async function getUserData(userId: string) {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
   const data = await prisma.user.findUnique({
     where: {
       id: userId

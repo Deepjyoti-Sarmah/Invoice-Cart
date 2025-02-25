@@ -1,11 +1,17 @@
-import React from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
-import InvoiceActions from './InvoiceActions'
-import { prisma } from '@/app/utils/db'
-import { requiredUser } from '@/app/utils/hooks';
-import { formatCurrency } from '@/app/utils/formatCurrency';
-import { Badge } from './ui/badge';
-import EmptyState from './EmptyState';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "./EmptyState";
+import { prisma } from "@/app/utils/db";
+import { requiredUser } from "@/app/utils/hooks";
+import { formatCurrency } from "@/app/utils/formatCurrency";
+import InvoiceActions from "./InvoiceActions";
 
 async function getData(userId: string) {
   const data = await prisma.invoice.findMany({
@@ -19,31 +25,28 @@ async function getData(userId: string) {
       createdAt: true,
       status: true,
       invoiceNumber: true,
-      currency: true
+      currency: true,
     },
     orderBy: {
       createdAt: "desc",
-    }
+    },
   });
 
   return data;
 }
-
-export default async function InvoiceList() {
+export async function InvoiceList() {
   const session = await requiredUser();
-  const data = await getData(session.user?.id as string)
-
+  const data = await getData(session.user?.id as string);
   return (
     <>
       {data.length === 0 ? (
         <EmptyState
-          title='No invoices found'
-          description='Create an invoice to get started'
-          buttontext='Create invoice'
-          href='/dasboard/invoices/create'
+          title="No invoices found"
+          description="Create an invoice to get started"
+          buttontext="Create invoice"
+          href="/dashboard/invoices/create"
         />
       ) : (
-
         <Table>
           <TableHeader>
             <TableRow>
@@ -63,22 +66,19 @@ export default async function InvoiceList() {
                 <TableCell>
                   {formatCurrency({
                     amount: invoice.total,
-                    currency: invoice.currency as any
+                    currency: invoice.currency as any,
                   })}
                 </TableCell>
                 <TableCell>
-                  <Badge>
-                    {invoice.status}
-                  </Badge>
+                  <Badge>{invoice.status}</Badge>
                 </TableCell>
                 <TableCell>
-                  {new Intl.DateTimeFormat("en-IN", {
+                  {new Intl.DateTimeFormat("en-US", {
                     dateStyle: "medium",
                   }).format(invoice.createdAt)}
                 </TableCell>
                 <TableCell className="text-right">
-                  <InvoiceActions
-                    status={invoice.status} id={invoice.id} />
+                  <InvoiceActions status={invoice.status} id={invoice.id} />
                 </TableCell>
               </TableRow>
             ))}
@@ -86,6 +86,5 @@ export default async function InvoiceList() {
         </Table>
       )}
     </>
-  )
+  );
 }
-
