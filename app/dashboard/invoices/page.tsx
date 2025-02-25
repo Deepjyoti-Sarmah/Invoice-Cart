@@ -1,9 +1,10 @@
 import InvoiceList from '@/components/InvoiceList'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 export default function InvoiceRoute() {
   return (
@@ -20,7 +21,9 @@ export default function InvoiceRoute() {
         </div>
       </CardHeader>
       <CardContent>
-        <InvoiceList />
+        <Suspense fallback={<Skeleton className='w-full h-[500px]' />}>
+          <InvoiceList />
+        </Suspense>
       </CardContent>
     </Card>
   )

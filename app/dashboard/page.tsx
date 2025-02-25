@@ -26,7 +26,12 @@ export default async function Dashboard() {
   return (
     <>
       {data.length < 1 ? (
-        <EmptyState />
+        <EmptyState
+          title='No invoice found'
+          description='Create an invoice to see the right here,'
+          buttontext='Create Invoice'
+          href='/dashboard/invoices/create'
+        />
       ) : (
         <>
           <DashboardBlocks />
