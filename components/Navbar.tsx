@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/logo.png"
 import { buttonVariants } from "./ui/button";
+import { RainbowButton } from "./magicui/rainbow-button";
 
 export default function Navbar() {
   return (
@@ -13,9 +14,10 @@ export default function Navbar() {
         </h3>
       </Link>
       <Link href="/login"
-        className={buttonVariants()}
       >
-        Get started
+        <RainbowButton>
+          Get started
+        </RainbowButton>
       </Link>
     </div>
   )
