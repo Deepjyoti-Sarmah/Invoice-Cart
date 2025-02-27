@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export async function getBaseUrl() {
+async function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_BASE_URL) {
     return process.env.NEXT_PUBLIC_BASE_URL.trim().replace(/\/$/, '')
   }
@@ -17,3 +17,5 @@ export async function getBaseUrl() {
 
   return `${protocol}://${host}`
 }
+
+export const BASE_URL = await getBaseUrl(); 
