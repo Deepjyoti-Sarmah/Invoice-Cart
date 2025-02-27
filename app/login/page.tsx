@@ -6,7 +6,7 @@ import React from 'react'
 import { auth, signIn } from '../utils/auth'
 import SubmitButton from '@/components/SubmitButton'
 import { redirect } from 'next/navigation'
-import { Github, Mail } from 'lucide-react'
+import { Github } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 
 export default async function Login() {
