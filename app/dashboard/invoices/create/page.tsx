@@ -1,6 +1,6 @@
 import { prisma } from '@/app/utils/db'
 import { requiredUser } from '@/app/utils/hooks';
-import CreateInvoice from '@/components/CreateInvoice'
+import { CreateInvoice } from '@/components/CreateInvoice';
 import React from 'react'
 
 async function getUserData(userId: string) {
@@ -26,8 +26,8 @@ export default async function InvoiceCreationRoute() {
   return (
     <>
       <CreateInvoice
-        firstname={data?.firstName as string}
-        lastname={data?.lastName as string}
+        firstName={data?.firstName as string}
+        lastName={data?.lastName as string}
         email={data?.email as string}
         address={data?.address as string}
       />

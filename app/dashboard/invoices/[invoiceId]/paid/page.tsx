@@ -1,4 +1,4 @@
-import { markAsPaid } from "@/app/actions";
+import { MarkAsPaidAction } from "@/app/actions";
 import { prisma } from "@/app/utils/db";
 import { requiredUser } from "@/app/utils/hooks";
 import SubmitButton from "@/components/SubmitButton";
@@ -53,7 +53,7 @@ export default async function MarkAsPaid({
           >Cancel</Link>
           <form action={async () => {
             "use server"
-            await markAsPaid(invoiceId)
+            await MarkAsPaidAction(invoiceId)
           }}>
             <SubmitButton text="Mark as Paid!" />
           </form>

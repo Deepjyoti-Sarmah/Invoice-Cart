@@ -36,10 +36,10 @@ interface iAppProps {
 }
 
 export function CreateInvoice({
-  address,
-  email,
   firstName,
   lastName,
+  address,
+  email,
 }: iAppProps) {
   const [lastResult, action] = useActionState(createInvoice, undefined);
   const [form, fields] = useForm({
