@@ -7,9 +7,6 @@ import { prisma } from "./utils/db"
 import { redirect } from "next/navigation"
 import { emailClient } from "./utils/mailtrap"
 import { formatCurrency } from "./utils/formatCurrency"
-// import { getBaseUrl } from "./utils/getUrl"
-
-// const BASE_URL = await getBaseUrl();
 
 export async function onboardUser(prevState: any, formData: FormData) {
   const session = await requiredUser()
@@ -89,7 +86,6 @@ export async function createInvoice(prevState: any, formData: FormData) {
         amount: submission.value.total,
         currency: submission.value.currency as any,
       }),
-      // "invoiceLink": `${BASE_URL}/api/invoice/${data.id}`
       "invoiceLink": process.env.NODE_ENV !== "production"
         ? `http://localhost:3000/api/invoice/${data.id}`
         : `https://invoice-cart.vercel.app/api/invoice/${data.id}`
@@ -156,7 +152,6 @@ export async function editInvoice(prevState: any, formData: FormData) {
         amount: submission.value.total,
         currency: submission.value.currency as any,
       }),
-      // "invoiceLink": `${BASE_URL}/api/invoice/${data.id}`
       "invoiceLink": process.env.NODE_ENV !== "production"
         ? `http://localhost:3000/api/invoice/${data.id}`
         : `https://invoice-cart.vercel.app/api/invoice/${data.id}`

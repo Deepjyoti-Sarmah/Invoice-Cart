@@ -1,36 +1,46 @@
-"use client"
+"use client";
 
-import React, { useActionState, useState } from 'react'
-import { Card, CardContent } from './ui/card'
-import { Badge } from './ui/badge'
-import { Input } from './ui/input'
-import { Label } from './ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
-import { Popover, PopoverTrigger } from '@radix-ui/react-popover'
-import { Button } from './ui/button'
-import { CalendarIcon } from 'lucide-react'
-import { PopoverContent } from './ui/popover'
-import { Calendar } from './ui/calendar'
-import { Textarea } from './ui/textarea'
-import SubmitButton from './SubmitButton'
-import { createInvoice } from '@/app/actions'
-import { useForm } from '@conform-to/react'
-import { parseWithZod } from '@conform-to/zod'
-import { invoiceSchema } from '@/app/utils/zodSchemas'
-import { formatCurrency } from '@/app/utils/formatCurrency'
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { CalendarIcon } from "lucide-react";
+import { useActionState, useState } from "react";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { createInvoice } from "@/app/actions";
+import { invoiceSchema } from "@/app/utils/zodSchemas";
+import { formatCurrency } from "@/app/utils/formatCurrency";
+import SubmitButton from "./SubmitButton";
 
-interface CreateInvoiceProps {
-  firstname: string;
-  lastname: string;
+interface iAppProps {
+  firstName: string;
+  lastName: string;
   address: string;
   email: string;
 }
 
-export default function CreateInvoice({
-  firstname,
-  lastname,
+export function CreateInvoice({
   address,
-  email }: CreateInvoiceProps) {
+  email,
+  firstName,
+  lastName,
+}: iAppProps) {
   const [lastResult, action] = useActionState(createInvoice, undefined);
   const [form, fields] = useForm({
     lastResult,
@@ -131,7 +141,7 @@ export default function CreateInvoice({
                   name={fields.fromName.name}
                   key={fields.fromName.key}
                   placeholder="Your Name"
-                  defaultValue={firstname + " " + lastname}
+                  defaultValue={firstName + " " + lastName}
                 />
                 <p className="text-red-500 text-sm">{fields.fromName.errors}</p>
                 <Input
@@ -343,6 +353,5 @@ export default function CreateInvoice({
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
-
