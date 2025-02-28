@@ -1,19 +1,19 @@
-"use server"
+"use server";
 
-import { requiredUser } from "./utils/hooks"
-import { parseWithZod } from "@conform-to/zod"
-import { invoiceSchema, onboardingSchema } from "./utils/zodSchemas"
-import { prisma } from "./utils/db"
-import { redirect } from "next/navigation"
-import { emailClient } from "./utils/mailtrap"
-import { formatCurrency } from "./utils/formatCurrency"
+import { parseWithZod } from "@conform-to/zod";
+import { invoiceSchema, onboardingSchema } from "./utils/zodSchemas";
+import { redirect } from "next/navigation";
+import { emailClient } from "./utils/mailtrap";
+import { formatCurrency } from "./utils/formatCurrency";
+import { requiredUser } from "./utils/hooks";
+import { prisma } from "./utils/db";
 
 export async function onboardUser(prevState: any, formData: FormData) {
-  const session = await requiredUser()
+  const session = await requiredUser();
 
   const submission = parseWithZod(formData, {
     schema: onboardingSchema,
-  })
+  });
 
   if (submission.status !== "success") {
     return submission.reply();
@@ -26,19 +26,19 @@ export async function onboardUser(prevState: any, formData: FormData) {
     data: {
       firstName: submission.value.firstName,
       lastName: submission.value.lastName,
-      address: submission.value.address
-    }
+      address: submission.value.address,
+    },
   });
 
-  return redirect("/dashboard")
+  return redirect("/dashboard");
 }
 
 export async function createInvoice(prevState: any, formData: FormData) {
-  const session = await requiredUser()
+  const session = await requiredUser();
 
   const submission = parseWithZod(formData, {
     schema: invoiceSchema,
-  })
+  });
 
   if (submission.status !== "success") {
     return submission.reply();
@@ -69,39 +69,39 @@ export async function createInvoice(prevState: any, formData: FormData) {
 
   const sender = {
     email: "hello@demomailtrap.com",
-    name: "Deep test",
+    name: "Jan Marshal",
   };
 
   emailClient.send({
     from: sender,
-    to: [{ email: "deepjyotisarmah37@gmail.com" }],
-    template_uuid: "94875a12-b0a4-4bfc-87f1-704328a7a563",
+    to: [{ email: "jan@alenix.de" }],
+    template_uuid: "3c01e4ee-a9ed-4cb6-bbf7-e57c2ced6c94",
     template_variables: {
-      "clientName": submission.value.clientName,
-      "invoiceNumber": submission.value.invoiceNumber,
-      "invoiceDueDate": new Intl.DateTimeFormat("en-IN", {
+      clientName: submission.value.clientName,
+      invoiceNumber: submission.value.invoiceNumber,
+      invoiceDueDate: new Intl.DateTimeFormat("en-US", {
         dateStyle: "long",
       }).format(new Date(submission.value.date)),
-      "invoiceAmount": formatCurrency({
+      invoiceAmount: formatCurrency({
         amount: submission.value.total,
         currency: submission.value.currency as any,
       }),
-      "invoiceLink": process.env.NODE_ENV !== "production"
-        ? `http://localhost:3000/api/invoice/${data.id}`
-        : `https://invoice-cart.vercel.app/api/invoice/${data.id}`
-    }
+      invoiceLink:
+        process.env.NODE_ENV !== "production"
+          ? `http://localhost:3000/api/invoice/${data.id}`
+          : `https://invoice-cart.vercel.app/api/invoice/${data.id}`,
+    },
   });
 
   return redirect("/dashboard/invoices");
 }
 
 export async function editInvoice(prevState: any, formData: FormData) {
-
   const session = await requiredUser();
 
   const submission = parseWithZod(formData, {
     schema: invoiceSchema,
-  })
+  });
 
   if (submission.status !== "success") {
     return submission.reply();
@@ -130,62 +130,63 @@ export async function editInvoice(prevState: any, formData: FormData) {
       status: submission.value.status,
       total: submission.value.total,
       note: submission.value.note,
-    }
-  })
+    },
+  });
 
   const sender = {
     email: "hello@demomailtrap.com",
-    name: "Deep test",
+    name: "Jan Marshal",
   };
 
   emailClient.send({
     from: sender,
-    to: [{ email: "deepjyotisarmah37@gmail.com" }],
-    template_uuid: "2d520580-09d9-4f01-ab46-01e8a6ae1bfc",
+    to: [{ email: "jan@alenix.de" }],
+    template_uuid: "9d04aa85-6896-48a8-94e9-b54354a48880",
     template_variables: {
-      "clientName": submission.value.clientName,
-      "invoiceNumber": submission.value.invoiceNumber,
-      "invoiceDueDate": new Intl.DateTimeFormat("en-IN", {
+      clientName: submission.value.clientName,
+      invoiceNumber: submission.value.invoiceNumber,
+      invoiceDueDate: new Intl.DateTimeFormat("en-US", {
         dateStyle: "long",
       }).format(new Date(submission.value.date)),
-      "invoiceAmount": formatCurrency({
+      invoiceAmount: formatCurrency({
         amount: submission.value.total,
         currency: submission.value.currency as any,
       }),
-      "invoiceLink": process.env.NODE_ENV !== "production"
-        ? `http://localhost:3000/api/invoice/${data.id}`
-        : `https://invoice-cart.vercel.app/api/invoice/${data.id}`
-    }
+      invoiceLink:
+        process.env.NODE_ENV !== "production"
+          ? `http://localhost:3000/api/invoice/${data.id}`
+          : `https://invoice-cart.vercel.app/api/invoice/${data.id}`,
+    },
   });
 
-  return redirect("/dashboard/invoices")
+  return redirect("/dashboard/invoices");
 }
 
-export async function deleteInvoice(invoiceId: string) {
-  const session = await requiredUser()
+export async function DeleteInvoice(invoiceId: string) {
+  const session = await requiredUser();
 
   const data = await prisma.invoice.delete({
     where: {
       userId: session.user?.id,
       id: invoiceId,
     },
-  })
+  });
 
-  return redirect("/dashboard/invoices")
+  return redirect("/dashboard/invoices");
 }
 
-export async function markAsPaid(invoiceId: string) {
+export async function MarkAsPaidAction(invoiceId: string) {
   const session = await requiredUser();
 
   const data = await prisma.invoice.update({
     where: {
       userId: session.user?.id,
-      id: invoiceId
+      id: invoiceId,
     },
     data: {
       status: "PAID",
-    }
-  })
+    },
+  });
 
-  return redirect("/dashboard/invoices")
+  return redirect("/dashboard/invoices");
 }
