@@ -9,7 +9,7 @@ import { emailClient } from "./utils/mailtrap"
 import { formatCurrency } from "./utils/formatCurrency"
 import { getBaseUrl } from "./utils/getUrl"
 
-const BASE_URL = getBaseUrl();
+const BASE_URL = await getBaseUrl();
 
 export async function onboardUser(prevState: any, formData: FormData) {
   const session = await requiredUser()
