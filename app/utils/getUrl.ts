@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers"
 
-async function getBaseUrl() {
+export async function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_BASE_URL) {
     return process.env.NEXT_PUBLIC_BASE_URL.trim().replace(/\/$/, '')
   }
@@ -14,4 +14,3 @@ async function getBaseUrl() {
   return `${protocol}://${host}`
 }
 
-export const BASE_URL = await getBaseUrl() 

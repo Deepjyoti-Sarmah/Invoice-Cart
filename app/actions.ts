@@ -7,7 +7,9 @@ import { prisma } from "./utils/db"
 import { redirect } from "next/navigation"
 import { emailClient } from "./utils/mailtrap"
 import { formatCurrency } from "./utils/formatCurrency"
-import { BASE_URL } from "@/lib/utils"
+import { getBaseUrl } from "./utils/getUrl"
+
+const BASE_URL = getBaseUrl();
 
 export async function onboardUser(prevState: any, formData: FormData) {
   const session = await requiredUser()
